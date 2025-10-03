@@ -1,7 +1,16 @@
-const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:4000";
+//const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:4000";
+
+// src/services/api.ts
+const RAW_BASE = import.meta.env.VITE_API_URL ?? "/api";
+
+// safe join (avoid double slashes)
+function join(base: string, path: string) {
+  return `${base.replace(/\/+$/, "")}${path.startsWith("/") ? path : `/${path}`}`;
+}
 
 export async function api<T = unknown>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
+  const url = join(RAW_BASE, path);
+  const res = await fetch(url, {
     headers: { "Content-Type": "application/json", ...(init?.headers || {}) },
     ...init,
   });
@@ -14,7 +23,6 @@ export async function api<T = unknown>(path: string, init?: RequestInit): Promis
 
 /** Quiz endpoints */
 export async function fetchNextQuestion(childId: string, level = 1) {
-  // returns the question object itself (not { data: ... })
   return api<{ id: string; level: number; prompt: string }>(
     `/quiz/next?childId=${encodeURIComponent(childId)}&level=${level}`
   );

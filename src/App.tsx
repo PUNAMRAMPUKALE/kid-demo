@@ -1,8 +1,11 @@
 import { Outlet, Link } from "@tanstack/react-router";
 import MascotParade from "./components/MascotParade";
-
+import BgMusicBoot from "./components/BgMusicBoot";
+import BgMusicToggle from "./components/BgMusicToggle";
 export default function App() {
-  return (
+  return (<>
+      <BgMusicBoot />
+      <BgMusicToggle />
     <div className="min-h-full">
       <header className="w-full bg-skyblue/80 backdrop-blur sticky top-0 z-10 shadow-soft">
         <div className="flex items-center justify-between py-4 px-4 sm:px-6">
@@ -27,5 +30,6 @@ export default function App() {
         </section>
       </main>
     </div>
+    </>
   );
 }

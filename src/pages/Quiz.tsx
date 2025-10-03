@@ -5,6 +5,7 @@ import { burst } from "../utils/confetti";
 import { fetchNextQuestion, submitQuiz } from "../services/api";
 import { getChildId, setChildId } from "../services/child";
 import Celebration from "../components/Celebration";
+import { playSfx } from "../sound/SoundProvider";
 
 export default function Quiz() {
   const [childId, setChild] = useState(getChildId());
@@ -52,9 +53,13 @@ export default function Quiz() {
       const res = await submitQuiz({ childId, questionId: question.id, answer });
       setMsg(res.companionText);
       if (res.correct) {
+        playSfx("success");
         burst();            // quick confetti
         setCelebrate(true); // overlay for ~1.8s
-      }
+      } else {
+  playSfx("failure");   // failure sound here
+  
+}
       // then queue next question
       setTimeout(() => {
         if (res.nextQuestion) setQuestion(res.nextQuestion);
